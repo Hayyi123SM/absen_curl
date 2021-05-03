@@ -166,6 +166,7 @@
 								<option value="https://elearning.akakom.ac.id/mod/attendance/view.php?id=13086">Prak PWC</option>
 								<option value="https://elearning.akakom.ac.id/mod/attendance/view.php?id=18860">Kec. Buatan</option>
 								<option value="https://elearning.akakom.ac.id/mod/attendance/view.php?id=14391">ALVECMA</option>
+								<option value="https://elearning.akakom.ac.id/mod/attendance/view.php?id=13083">Jar. nirkabel</option>
 							</select>
 						</td>
 					</tr>

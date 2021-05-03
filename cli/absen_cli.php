@@ -1,5 +1,5 @@
 <?php 
-	function getWeb($url){
+	function getToken($url){
 		$ch = curl_init();
 		$option = [
 			CURLOPT_URL => $url,
@@ -29,7 +29,7 @@
 
 	function login($url, $user, $pw, $opsi){
 		$ch = curl_init();
-		$token = getWeb($url);
+		$token = getToken($url);
 		$option = [
 			CURLOPT_URL => $url,
 			CURLOPT_RETURNTRANSFER => 1,
@@ -58,9 +58,14 @@
 		curl_close($ch);
 		$error = strpos($result, '<div class="loginerrors mt-3">');
 		if(!$error){
-			return praAbsen($opsi);
+			for ($i=0; $i < 5; $i++) { 
+				praAbsen($opsi[$i]);
+			}
 		}else{
-			header("location:index.php?error=true");
+			echo "---------------------------------- \n";
+			echo "| Username atau Password salah!! |\n";
+			echo "---------------------------------- \n";
+			start();
 		}
 	}
 
@@ -90,17 +95,40 @@
 		$result = curl_exec($ch);
 		curl_close($ch);
 		$cell2 = explode('<td class="statuscol cell c2 lastcol" style="text-align:center;width:*;" colspan="3">', $result);
-		if ($cell2[1]) {
+		$matkul = explode("id=", $url);
+			switch ($matkul[1]) {
+				case 13085:
+					$nMatkul = "PWC";
+					break;
+				case 13086:
+					$nMatkul = "PrakPWC";
+					break;
+				case 18860:
+					$nMatkul = "Kec.Butan";
+					break;
+				case 14391:
+					$nMatkul = "ALVECMA";
+					break;
+				case 13083:
+					$nMatkul = "Jaringan";
+					break;
+				default:
+					$nMatkul = "Ada yang salah";
+					break;
+			}
+		if (count($cell2) != 1) {
 			$link = explode('<a href="', $cell2[1]);
 			$endpoint = explode('">', $link[1]);
 			// return var_dump($endpoint);
-			return absen($endpoint[0]);
+			return absen($endpoint[0],$nMatkul);
 		}else{
-			header("location:index.php?absen=false");
+			echo "=================================== \n";
+			echo " | Absen ".$nMatkul." belum ada!! |\n";
+			echo "=================================== \n";
 		}
 	}
 
-	function absen($url){
+	function absen($url, $nMatkul){
 			$ch = curl_init();
 			$options = [
 				CURLOPT_URL => $url,
@@ -124,22 +152,74 @@
 			curl_setopt_array($ch, $options);
 			$result = curl_exec($ch);
 			curl_close($ch);
-			return $result;
-			// header("location:index.php?absen=success");
-		
+			// return $result;
+			echo "+++++++++++++++++++++++++++++++++++++ \n";
+			echo "+\[ Absen ".$nMatkul." berhasil!! ]/+ \n";
+			echo "+++++++++++++++++++++++++++++++++++++ \n";
 	}
 
-	if(isset($_POST['Submit'])){
-		$user = htmlspecialchars($_POST['user']);
-		$pw = htmlspecialchars($_POST['password']);
-		$opsi = htmlspecialchars($_POST['matkul']);
-
-		if(!empty($user) && !empty($pw) && !empty($opsi)){
-			echo login("https://elearning.akakom.ac.id/login/index.php", $user, $pw, $opsi);
-		}else{
-			header("location:index.php?empty=true");
+	function start($ulang = true){
+	while ($ulang) {
+			echo "Slahkan masukan username : ";
+			$us = trim(fgets(STDIN));
+			echo "Silahkan masukan password : ";
+			$pw = trim(fgets(STDIN));
+			$matkul = [
+				"https://elearning.akakom.ac.id/mod/attendance/view.php?id=13085",
+				"https://elearning.akakom.ac.id/mod/attendance/view.php?id=13086",
+				"https://elearning.akakom.ac.id/mod/attendance/view.php?id=18860",
+				"https://elearning.akakom.ac.id/mod/attendance/view.php?id=14391",
+				"https://elearning.akakom.ac.id/mod/attendance/view.php?id=13083",
+			];
+			// $ulg = true;
+			// while ($ulg) {
+			// 	echo "Silahkan masukan pilihan matkul(masukan dengan angka): ";
+			// 	$opsi = trim(fgets(STDIN));
+			// 	switch ($opsi) {
+			// 		case 1:
+			// 			$matkul = "https://elearning.akakom.ac.id/mod/attendance/view.php?id=13085";
+			// 			$ulg = false;
+			// 			break;
+			// 		case 2:
+			// 			$matkul = "https://elearning.akakom.ac.id/mod/attendance/view.php?id=13086";
+			// 			$ulg = false;
+			// 			break;
+			// 		case 3:
+			// 			$matkul = "https://elearning.akakom.ac.id/mod/attendance/view.php?id=18860";
+			// 			$ulg = false;
+			// 			break;
+			// 		case 4:
+			// 			$matkul = "https://elearning.akakom.ac.id/mod/attendance/view.php?id=14391";
+			// 			$ulg = false;
+			// 			break;
+			// 		case 5:
+			// 			$matkul = "https://elearning.akakom.ac.id/mod/attendance/view.php?id=13083";
+			// 			$ulg = false;
+			// 			break;
+			// 		default:
+			// 			echo "+---------------------------+ \n";
+			// 			echo "+ Pilihan matkul tidak ada! + \n";
+			// 			echo "+---------------------------+ \n";
+			// 			break;
+			// 	}
+			// }
+			if ($us == "" && $pw == "") {
+				echo "----------------------------------------------- \n";
+				echo "| Username atau Password tidak boleh kosong!! | \n";
+				echo "----------------------------------------------- \n";
+			}else{
+				$url = "https://elearning.akakom.ac.id/login/index.php";
+				login($url,$us,$pw,$matkul);
+				$ulang = false;
+			}
 		}
 	}
+	
+	echo "Hallo Selamat Datang Di Bot Absen Heandsome \n";
+	echo "--------------------------------------------\n";
+	start();
+
+	
 
 
 
