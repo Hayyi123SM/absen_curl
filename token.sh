@@ -1,2 +1,0 @@
-cur=`curl 'https://elearning.akakom.ac.id/login/index.php' -H 'User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4363.0 Safari/537.36' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,/;q=0.8' -H 'Accept-Language: id,en-US;q=0.7,en;q=0.3' --compressed -H 'DNT: 1' -H 'Connection: keep-alive' -H 'Cookie: MoodleSession=v1goj50a6m47k7qhq91l82satm' -H 'Upgrade-Insecure-Requests: 1' -s`
-echo $cur

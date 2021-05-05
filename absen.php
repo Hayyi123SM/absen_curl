@@ -56,6 +56,10 @@
 		curl_setopt_array($ch, $option);
 		$result = curl_exec($ch);
 		curl_close($ch);
+		$span = explode('<span class="usertext mr-1">', $result);
+		$tutupSpan = explode('</span>', $span[1]);
+		$nama = [];
+		preg_match("/[^\d]+/", $tutupSpan[0],$nama);
 		$error = strpos($result, '<div class="loginerrors mt-3">');
 		if(!$error){
 			return praAbsen($opsi);
