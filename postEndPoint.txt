@@ -1,0 +1,7 @@
+
+
+
+
+POST ENDPOINT => sessid=2255&sesskey=QOKpormr5h&sesskey=QOKpormr5h&_qf__mod_attendance_student_attendance_form=1&mform_isexpanded_id_session=1&status=1732&submitbutton=Save+changes
+
+ENDPOINT => https://elearning.akakom.ac.id/mod/attendance/attendance.php
